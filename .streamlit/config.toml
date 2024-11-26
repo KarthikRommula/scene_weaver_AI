@@ -1,11 +1,9 @@
 [server]
 maxUploadSize = 1024
+
 [theme]
-primaryColor = "#4CAF50"  # You can customize this to your liking
+primaryColor = "#4CAF50"  # Customize this to your liking
 backgroundColor = "#FFFFFF"
 secondaryBackgroundColor = "#F0F2F6"
 textColor = "#000000"
 font = "sans serif"
-
-[global]
-hideStreamlitMark = true
