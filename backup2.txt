@@ -1,0 +1,183 @@
+import streamlit as st
+from difflib import SequenceMatcher
+import pdfplumber
+from docx import Document
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+def apply_custom_css():
+    st.markdown("""
+    <style>
+    /* General styling */
+    body {
+        background-color: #f5f5f5;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .script-container {
+        font-family: 'Courier New', Courier, monospace;
+        white-space: pre-wrap;
+        font-size: 16px;
+        line-height: 1.6;
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        max-width: 100%;
+        overflow-wrap: break-word;
+        margin-bottom: 15px;
+    }
+    .dialogue {
+        margin-left: 40px;
+    }
+    .character {
+        font-weight: bold;
+    }
+    .action {
+        font-style: italic;
+    }
+    /* Add a specific class to center the first dialogue */
+    .center-dialogue {
+        text-align: center;
+        margin-left: -5px;
+    }
+    .stTextArea textarea {
+    font-family: 'Courier New', Courier, monospace; /* Script-like appearance */
+    font-size: 16px; /* Comfortable font size */
+    line-height: 1.6; /* Spacing between lines */
+    width: 100%; /* Full width */
+    height: 300px; /* Fixed height */
+    padding: 10px; /* Inner padding */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #ccc; /* Light grey border */
+    background-color: #fff; /* White background */
+    color: #333; /* Dark text color */
+    resize: vertical; /* Allows vertical resizing only */
+}
+
+    .download-btn-container {
+        margin-top: 20px;
+        text-align: center;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+def read_file(uploaded_file):
+    content = None
+    if uploaded_file.name.endswith('.txt'):
+        content = uploaded_file.read().decode('utf-8')
+    elif uploaded_file.name.endswith('.pdf'):
+        with pdfplumber.open(uploaded_file) as pdf:
+            content = ''.join([page.extract_text() for page in pdf.pages if page.extract_text()])
+    elif uploaded_file.name.endswith('.docx'):
+        doc = Document(uploaded_file)
+        content = '\n'.join([para.text for para in doc.paragraphs if para.text.strip()])
+    else:
+        st.write(f"Unsupported file type for {uploaded_file.name}. Please upload a .txt, .pdf, or .docx file.")
+    return content
+
+def choose_best_parts(scripts):
+    optimized_script = ""
+    dialogues = [script.split("\n") for script in scripts]
+    
+    # To store previous character names to avoid duplication
+    previous_characters = set()
+
+    max_lines = max(len(dialogue_list) for dialogue_list in dialogues)
+
+    for line_index in range(max_lines):
+        best_line = ""
+        highest_score = 0
+
+        for i in range(len(dialogues)):
+            if line_index < len(dialogues[i]):
+                line = dialogues[i][line_index]
+
+                # Check for character names to avoid duplication
+                if line.strip().isupper():  # Assuming character names are in uppercase
+                    if line.strip() not in previous_characters:
+                        previous_characters.add(line.strip())
+                    else:
+                        continue
+
+                for j in range(i + 1, len(dialogues)):
+                    if line_index < len(dialogues[j]):
+                        comparison_line = dialogues[j][line_index]
+                        sequence_match = SequenceMatcher(None, line, comparison_line)
+                        match_ratio = sequence_match.ratio()
+
+                        if match_ratio > highest_score:
+                            highest_score = match_ratio
+                            best_line = line if len(line) > len(comparison_line) else comparison_line
+
+        optimized_script += f"\n{best_line}"
+
+    return optimized_script
+
+def format_script(script):
+    formatted_script = ""
+    lines = script.split("\n")
+    
+    # To center the first dialogue
+    first_dialogue = True
+
+    for line in lines:
+        if line.strip():
+            if line.strip().isupper():  # Character name
+                formatted_script += f"<div class='character'>{line.strip()}</div>\n"
+            elif line.strip().startswith('(') and line.strip().endswith(')'):  # Action
+                formatted_script += f"<div class='action'>{line.strip()}</div>\n"
+            else:  # Dialogue
+                # Apply 'center-dialogue' class to the first dialogue
+                if first_dialogue:
+                    formatted_script += f"<div class='dialogue center-dialogue'>{line.strip()}</div>\n"
+                    first_dialogue = False  # Only apply to the first dialogue
+                else:
+                    formatted_script += f"<div class='dialogue'>{line.strip()}</div>\n"
+    
+    return formatted_script
+
+
+def main():
+    apply_custom_css()
+
+    st.title("Script Analyzer and Optimizer")
+
+    # File Upload Section
+    st.header("Upload your Scripts")
+    uploaded_files = st.file_uploader("Upload your script files", type=['txt', 'pdf', 'docx'], accept_multiple_files=True, label_visibility='hidden')
+    
+    if uploaded_files:
+        scripts = []
+        for uploaded_file in uploaded_files:
+            content = read_file(uploaded_file)
+            if content:
+                scripts.append(content)
+
+        if scripts:
+            # Process and format the script
+            optimized_script = choose_best_parts(scripts)
+            formatted_script = format_script(optimized_script)
+
+            # Display the formatted script in a scrollable container
+            st.markdown(f"<div class='script-container'>{formatted_script}</div>", unsafe_allow_html=True)
+
+            # Add edit and download functionality
+            st.markdown("<div class='edit-container'>", unsafe_allow_html=True)
+            st.header("Edit the Script")
+            edited_script = st.text_area("Edit the optimized script", value=optimized_script, height=300, key="edit_area", label_visibility="hidden", help="You can edit the optimized script here.", max_chars=5000, placeholder="Edit your script here...")
+            st.markdown("</div>", unsafe_allow_html=True)
+
+            # Download section with custom styling
+            st.markdown("<div class='download-btn-container'>", unsafe_allow_html=True)
+            st.download_button(
+                label="Download",
+                data=edited_script,
+                file_name="edited_script.txt",
+                mime="text/plain"
+            )
+            st.markdown("</div>", unsafe_allow_html=True)
+
+if __name__ == "__main__":
+    main()
