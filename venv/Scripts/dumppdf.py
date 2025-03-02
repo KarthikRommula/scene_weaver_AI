@@ -1,4 +1,4 @@
-#!C:\Users\KARTHIK\Documents\ai_bot\venv\scripts\python.exe
+#!C:\Users\KARTHIK\Documents\CODE\scene_weaver_ai_bot\venv\Scripts\python.exe
 """Extract pdf structure in XML format"""
 import logging
 import os.path

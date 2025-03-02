@@ -1,7 +1,7 @@
-import streamlit as st
+import streamlit as st # type: ignore
 from difflib import SequenceMatcher
-import pdfplumber
-from docx import Document
+import pdfplumber # type: ignore
+from docx import Document # type: ignore
 from dotenv import load_dotenv
 
 # Load environment variables

@@ -1,4 +1,4 @@
-#!C:\Users\KARTHIK\Documents\ai_bot\venv\scripts\python.exe
+#!C:\Users\KARTHIK\Documents\CODE\scene_weaver_ai_bot\venv\Scripts\python.exe
 """A command line tool for extracting text and images from PDF and
 output it to plain text, html, xml or tags."""
 import argparse

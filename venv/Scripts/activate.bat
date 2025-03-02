@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\KARTHIK\Documents\ai_bot\venv
+set VIRTUAL_ENV=C:\Users\KARTHIK\Documents\CODE\scene_weaver_ai_bot\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
