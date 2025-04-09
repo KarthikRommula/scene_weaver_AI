@@ -1,0 +1,62 @@
+# Core dependencies
+streamlit==1.40.1
+python-dotenv==1.0.1
+
+# AWS and AI services
+boto3==1.34.142
+botocore==1.34.142
+groq==0.12.0
+
+# Document processing
+pdfplumber==0.11.4
+python-docx==1.1.2
+pdfminer.six==20231228
+lxml==5.3.0
+pypdfium2==4.30.0
+
+# Data processing and utilities
+numpy==1.26.4
+pandas==2.2.3
+pillow==11.0.0
+
+# HTTP and API libraries
+requests==2.32.3
+httpx==0.27.2
+aiohttp==3.11.7
+
+# Streamlit dependencies
+altair==5.5.0
+blinker==1.9.0
+cachetools==5.5.0
+click==8.1.7
+gitdb==4.0.11
+GitPython==3.1.43
+markdown-it-py==3.0.0
+MarkupSafe==3.0.2
+mdurl==0.1.2
+protobuf==5.28.3
+pyarrow==18.0.0
+pydeck==0.9.1
+Pygments==2.18.0
+pytz==2024.2
+rich==13.9.4
+tenacity==9.0.0
+toml==0.10.2
+tornado==6.4.2
+watchdog==6.0.0
+
+# Security and authentication
+cryptography==43.0.3
+certifi==2024.8.30
+
+# Utility libraries
+typing_extensions==4.12.2
+python-dateutil==2.9.0.post0
+PyYAML==6.0.2
+jsonschema==4.23.0
+
+# Additional dependencies
+colorama==0.4.6
+SQLAlchemy==2.0.36
+annotated-types==0.7.0
+pydantic==2.10.1
