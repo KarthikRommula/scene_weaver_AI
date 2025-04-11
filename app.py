@@ -51,18 +51,32 @@ def apply_custom_css():
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     
-    .app-header h1 {
-        color: white;
-        margin: 0;
-        font-size: 2.2rem;
-        font-weight: 800;
-    }
-    
-    .app-header p {
-        margin: 0.5rem 0 0 0;
-        opacity: 0.9;
-        font-size: 1rem;
-    }
+.app-header {
+    text-align: center;
+}
+
+.app-header h1 {
+    color: white;
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 800;
+    width: 100%;
+}
+
+.app-header p {
+    margin: 0.5rem 0 0 0;
+    opacity: 0.9;
+    font-size: 1rem;
+    width: 100%;
+}
+
+/* Ensuring both elements have equal width */
+.app-header h1,
+.app-header p {
+    display: block;
+    text-align: center;
+}
+
 
     /* Script container styling */
     .script-container {
@@ -71,7 +85,7 @@ def apply_custom_css():
         font-size: 16px;
         line-height: 1.8;
         background-color: #ffffff;
-        padding: 20px;
+        padding: 25px;
         border-radius: 8px;
         border: 1px solid #ddd;
         width: 100%;
@@ -79,6 +93,7 @@ def apply_custom_css():
         margin-bottom: 25px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         transition: all 0.3s ease;
+        min-height: 400px;
     }
 
     .script-container:hover {
@@ -140,10 +155,8 @@ def apply_custom_css():
         color: white;
         border: none;
         border-radius: 6px;
-        padding: 0.6rem 1.2rem;  /* Increased padding */
         font-weight: 500;
         transition: all 0.2s ease;
-        margin: 0.3rem 0;  /* Added margin */
     }
 
     .stButton>button:hover {
@@ -309,7 +322,6 @@ def apply_custom_css():
         
         .stButton>button {
             width: 100%;
-            margin-bottom: 0.5rem;
         }
         
         .download-btn-container {
@@ -565,7 +577,7 @@ def analyze_script_with_claude(script_content, prompt_type="analyze", analysis_f
         prompt_type (str): Type of analysis to perform (analyze, enhance, feedback)
         analysis_focus (str, optional): Specific aspect to focus analysis on
         temperature (float, optional): Creativity level for AI (0.0-1.0)
-        enhancement_focus (list, optional): Areas to focus enhancement on
+        enhancement_focus (list, optional): Areas to focus enhancement on   
     
     Returns:
         str: AI response with analysis or enhanced script
@@ -720,17 +732,16 @@ def main():
     # Create a modern header with logo and title
     st.markdown("""
     <div class="app-header">
-        <h1><span style="color: #e8f4f8;">Scene</span> Weaver</h1>
+       <h1><span style="color: #e8f4f8;">Genius</span>&nbsp;AI</h1>
         <p>AI-Powered Script Collaboration Platform</p>
-        <p style="font-size: 12px; opacity: 0.8;">Powered by Claude 3.5 Sonnet</p>
     </div>
     """, unsafe_allow_html=True)
     
     # Add a brief description of the platform
     st.markdown("""
     <div style="background-color: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-        <h4 style="color: #2a5d84; margin-top: 0;">About Scene Weaver</h4>
-        <p>Scene Weaver streamlines collaborative scriptwriting by intelligently combining multiple drafts into a cohesive, polished scene. 
+        <h4 style="color: #2a5d84; margin-top: 0;">About Genius AI</h4>
+        <p>Genius AI streamlines collaborative scriptwriting by intelligently combining multiple drafts into a cohesive, polished scene. 
         Our advanced algorithm analyzes tone, style, and flow to create a seamless script that preserves the best elements from each contributor.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -883,8 +894,8 @@ def main():
                 analysis_container = st.container()
                 
                 # Add a button to trigger the analysis
-                if st.button("Analyze Script with Claude AI", key="analyze_btn", use_container_width=True):
-                    with st.spinner("Claude is analyzing your script..."):
+                if st.button("Analyze Script", key="analyze_btn", use_container_width=True):
+                    with st.spinner("Genius AI is analyzing your script..."):
                         # Pass the analysis type and temperature to customize the analysis
                         analysis = analyze_script_with_claude(
                             script_content=optimized_script, 
@@ -896,7 +907,7 @@ def main():
                         # Store the analysis in session state for persistence
                         st.session_state.script_analysis = analysis
                 
-                # Display analysis results if available
+                # Display analysis results if available 
                 with analysis_container:
                     if 'script_analysis' in st.session_state:
                         # Create a more visually appealing analysis display
@@ -920,7 +931,7 @@ def main():
             # Tab 3: AI Enhancement with Claude - Enhanced UI
             with tabs[2]:
                 st.markdown("""<h3 style="color: #2a5d84;">AI Script Enhancement</h3>""", unsafe_allow_html=True)
-                st.markdown("""<p style="color: #666;">Let Claude enhance your script with improved dialogue, descriptions, and character development.</p>""", unsafe_allow_html=True)
+                st.markdown("""<p style="color: #666;">Let Genius AI enhance your script with improved dialogue, descriptions, and character development.</p>""", unsafe_allow_html=True)
                 
                 # Add enhancement options
                 enhancement_focus = st.multiselect(
@@ -934,8 +945,8 @@ def main():
                 enhancement_container = st.container()
                 
                 # Add a button to trigger the enhancement
-                if st.button("Enhance Script with Claude AI", key="enhance_btn", use_container_width=True):
-                    with st.spinner("Claude is enhancing your script..."):
+                if st.button("Enhance Script with Genius AI", key="enhance_btn", use_container_width=True):
+                    with st.spinner("Genius AI is enhancing your script..."):
                         # Use the temperature from sidebar settings and enhancement focus
                         enhanced_script = analyze_script_with_claude(
                             script_content=optimized_script, 
@@ -989,26 +1000,35 @@ def main():
                         if 'show_comparison' in st.session_state and st.session_state.show_comparison:
                             st.markdown("""<h4 style="color: #2a5d84; margin-top: 20px;">Original vs Enhanced</h4>""", unsafe_allow_html=True)
                             
+                            # Create dropdown to select which original script to compare with
+                            selected_original = st.selectbox(
+                                "Select original script to compare with:",
+                                options=file_names,
+                                index=0
+                            )
+                            selected_original_index = file_names.index(selected_original)
+                            original_script_content = scripts[selected_original_index]
+                            
                             # Create two columns for side-by-side comparison with improved readability
                             comp_col1, comp_col2 = st.columns(2)
                             
                             with comp_col1:
-                                st.markdown("""<p style="font-weight: 500; color: #2a5d84;">Original Script</p>""", unsafe_allow_html=True)
-                                st.markdown(f"<div class='script-container' style='height: 500px; overflow-y: auto; background-color: #f9f9f9; font-size: 15px; line-height: 1.7;'>{format_script(optimized_script)}</div>", unsafe_allow_html=True)
+                                st.markdown(f"""<p style="font-weight: 500; color: #2a5d84;">Original Script: {selected_original}</p>""", unsafe_allow_html=True)
+                                st.markdown(f"<div class='script-container' style='height: 600px; width: 100%; overflow-y: auto; background-color: #f9f9f9; font-size: 16px; line-height: 1.8;'>{format_script(original_script_content)}</div>", unsafe_allow_html=True)
                             
                             with comp_col2:
                                 st.markdown("""<p style="font-weight: 500; color: #2a5d84;">Enhanced Script</p>""", unsafe_allow_html=True)
-                                st.markdown(f"<div class='script-container' style='height: 500px; overflow-y: auto; background-color: #f0f7ff; font-size: 15px; line-height: 1.7;'>{format_script(st.session_state.enhanced_script)}</div>", unsafe_allow_html=True)
+                                st.markdown(f"<div class='script-container' style='height: 600px; width: 100%; overflow-y: auto; background-color: #f0f7ff; font-size: 16px; line-height: 1.8;'>{format_script(st.session_state.enhanced_script)}</div>", unsafe_allow_html=True)
                             
-                            # Calculate similarity between original and enhanced
-                            similarity = SequenceMatcher(None, optimized_script, st.session_state.enhanced_script).ratio()
+                            # Calculate similarity between selected original and enhanced
+                            similarity = SequenceMatcher(None, original_script_content, st.session_state.enhanced_script).ratio()
                             st.markdown(f"""<p>Similarity: <strong>{similarity:.2%}</strong></p>""", unsafe_allow_html=True)
                             
                             # Add a detailed diff view for better comparison
                             st.markdown("""<h4 style="color: #2a5d84; margin-top: 20px;">Detailed Changes</h4>""", unsafe_allow_html=True)
                             
                             # Split scripts into lines for comparison
-                            original_lines = optimized_script.split('\n')
+                            original_lines = original_script_content.split('\n')
                             enhanced_lines = st.session_state.enhanced_script.split('\n')
                             
                             # Display line-by-line comparison with highlighting
@@ -1039,27 +1059,43 @@ def main():
                 # Create a more professional editor layout
                 edit_col1, edit_col2 = st.columns([1, 1])
                 
+                # Add script selection option
+                script_to_edit = st.radio(
+                    "Select script to edit:",
+                    options=["Optimized Script", "Enhanced Script (if available)"],
+                    horizontal=True
+                )
+                
+                # Determine which script to use based on selection
+                if script_to_edit == "Enhanced Script (if available)" and 'enhanced_script' in st.session_state:
+                    source_script = st.session_state.enhanced_script
+                    script_source_name = "Enhanced Script"
+                else:
+                    source_script = optimized_script
+                    script_source_name = "Optimized Script"
+                
                 with edit_col1:
-                    st.markdown("""<p style="font-weight: 500; color: #2a5d84;">Edit Script</p>""", unsafe_allow_html=True)
+                    st.markdown(f"""<p style="font-weight: 500; color: #2a5d84;">Edit {script_source_name}</p>""", unsafe_allow_html=True)
                     # Initialize session state variables if they don't exist
-                    if 'script_content' not in st.session_state:
-                        st.session_state.script_content = optimized_script
+                    if 'script_content' not in st.session_state or st.session_state.get('last_script_source') != script_to_edit:
+                        st.session_state.script_content = source_script
+                        st.session_state.last_script_source = script_to_edit
                     if 'should_reset' not in st.session_state:
                         st.session_state.should_reset = False
                         
                     # Check if we need to reset the content
                     if st.session_state.should_reset:
-                        st.session_state.script_content = optimized_script
+                        st.session_state.script_content = source_script
                         st.session_state.should_reset = False
                     
                     # Use the tracked content to populate the text area
                     edited_script = st.text_area(
-                        "Edit the optimized script", 
+                        f"Edit the {script_source_name.lower()}", 
                         value=st.session_state.script_content,
-                        height=500, 
+                        height=600, 
                         key="edit_area", 
                         label_visibility="collapsed", 
-                        help="You can edit the optimized script here.", 
+                        help=f"You can edit the {script_source_name.lower()} here.", 
                         placeholder="Edit your script here..."
                     )
                     
@@ -1069,7 +1105,7 @@ def main():
                 with edit_col2:
                     st.markdown("""<p style="font-weight: 500; color: #2a5d84;">Live Preview</p>""", unsafe_allow_html=True)
                     # Live Preview for Edit Mode
-                    st.markdown(f"<div class='script-container' style='height: 500px; overflow-y: auto;'>{format_script(edited_script)}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='script-container' style='height: 600px; width: 100%; overflow-y: auto;'>{format_script(edited_script)}</div>", unsafe_allow_html=True)
                 
                 # Add professional download and save options
                 save_col1, save_col2, save_col3, save_col4 = st.columns([1, 1, 1, 1])
@@ -1119,7 +1155,7 @@ def main():
                     # Make Revert to Original button functional
                     if st.button("Revert to Original", use_container_width=True):
                         # Store the original script in a separate session state variable
-                        st.session_state.script_content = optimized_script
+                        st.session_state.script_content = source_script
                         # Clear undo history when reverting to original
                         st.session_state.undo_history = []
                         st.session_state.current_undo_index = -1
@@ -1138,12 +1174,12 @@ def main():
                 with comp_col1:
                     draft1 = st.selectbox("Select First Draft", options=file_names, index=0)
                     draft1_index = file_names.index(draft1)
-                    st.text_area("Draft 1 Content", value=scripts[draft1_index], height=300, key="draft1_content")
+                    st.text_area("Draft 1 Content", value=scripts[draft1_index], height=400, key="draft1_content")
                 
                 with comp_col2:
                     draft2 = st.selectbox("Select Second Draft", options=file_names, index=min(1, len(file_names)-1))
                     draft2_index = file_names.index(draft2)
-                    st.text_area("Draft 2 Content", value=scripts[draft2_index], height=300, key="draft2_content")
+                    st.text_area("Draft 2 Content", value=scripts[draft2_index], height=400, key="draft2_content")
                 
                 # Calculate and display similarity metrics
                 if draft1 != draft2:
@@ -1480,8 +1516,13 @@ def main():
                                 import pandas as pd
                                 chart_df = pd.DataFrame(chart_data)
                                 
-                                # Display bar chart
-                                st.bar_chart(chart_df.set_index("Character"))
+                                # Display bar chart if we have data
+                                if not chart_df.empty and "Character" in chart_df.columns:
+                                    st.bar_chart(chart_df.set_index("Character"))
+                                elif not chart_df.empty:
+                                    st.warning("Unable to create chart: 'Character' column not found")
+                                else:
+                                    st.info("No character data available for visualization")
                             
                             # Add download button for the report
                             report_text = f"""# Detailed Comparison Report
