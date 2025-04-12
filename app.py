@@ -593,6 +593,7 @@ def analyze_script_with_claude(script_content, prompt_type="analyze", analysis_f
 2. Character development and dialogue quality
 3. Themes and subtext
 4. Areas for improvement
+Provide the enhanced version of the script in the same language as the original.
 
 Script:
 {script}
@@ -682,12 +683,13 @@ Provide a detailed analysis of the plot structure with specific examples from th
         prompt_template = f"""You are an expert screenplay writer. Enhance the following script with a specific focus on these areas:
 {focus_areas}
 
-Maintain the original story and characters but elevate the quality of writing in these specific areas.
+Maintain the original story, characters, and language of the script. If the script is in a non-English language like Telugu, Hindi, or any other language, your response MUST be in that same language. Do not translate the script to English.
+
 
 Script:
 {{script}}
 
-Provide the enhanced version of the script."""
+Provide the enhanced version of the script in the same language as the original."""
     
     # Format the prompt with the script content
     formatted_prompt = prompt_template.format(script=script_content)
